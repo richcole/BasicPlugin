@@ -18,7 +18,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -82,17 +84,39 @@ public class BasicListener implements Listener {
 				if (subCommand.equals("set")) {
 					return setMetaDataCommand(sender, subArgList);
 				}
-				else if (subCommand.equals("teleport")) {
+				if (subCommand.equals("teleport")) {
 					return teleportCommand(sender, subArgList);
 				}
 				if (subCommand.equals("where")) {
 					return whereCommand(sender, subArgList);
+				}
+				if (subCommand.equals("shoot")) {
+					return shootCommand(sender, subArgList);
 				}
 				return false;
 			}
 			
 		}
 		return false;
+	}
+	
+	private boolean shootCommand(CommandSender sender, List<String> subArgList) {
+		if ( sender instanceof Player ) {
+			Player player = (Player) sender;
+			player.launchProjectile(SmallFireball.class);
+			return true;
+		}
+		return false;
+	}
+	
+	@EventHandler
+	public void onInteraction(PlayerInteractEvent event) {
+		ItemStack i = event.getItem();
+		Player p = event.getPlayer();
+		if (i != null && i.getType() != null && i.getType().equals(Material.BLAZE_ROD)) {
+			Fireball fireball = p.launchProjectile(Fireball.class);
+			fireball.setYield(0);
+		}
 	}
 	
 	private boolean fill(CommandSender sender, List<String> subArgList) {
@@ -385,7 +409,6 @@ public class BasicListener implements Listener {
     public void onBlockPlaced(BlockPlaceEvent e) {
     	Block b = e.getBlockPlaced();
     	if( b != null ) { 
-    		e.getPlayer().sendMessage("You clicked at " + getStringFromLocation(b.getLocation()) + " type " + b.getType());
     		lastBlockPlaced.put(e.getPlayer(), b);
     	}
     }
