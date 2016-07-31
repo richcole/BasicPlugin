@@ -1,0 +1,15 @@
+name: BasicPlugin
+main: richcole.BasicPlugin
+version: 1.0
+commands:
+  bp:
+    set:
+      description: set metadata on selected object
+      usage: /<command> key value
+    telport:
+      description: teleport a player to a location 
+      usage: /bp teleport [player] [world] [location]
+    where:
+      description: print out where you are in the world
+      usage: /bp where
+
