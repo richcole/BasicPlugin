@@ -36,6 +36,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Button;
+import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
@@ -319,7 +321,7 @@ public class BasicListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-    	event.getPlayer().setGameMode(GameMode.ADVENTURE);
+    	event.getPlayer().setGameMode(GameMode.SURVIVAL);
     	PlayerInventory iv = event.getPlayer().getInventory();
     	iv.setItem(2, newSignWriter());
     	Bukkit.broadcastMessage("The server welcomes " + event.getPlayer().getDisplayName());
@@ -371,7 +373,7 @@ public class BasicListener implements Listener {
             }
         }
     }
-	
+    
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
     	if (isLobby(event.getEntity()) ) {
@@ -401,6 +403,10 @@ public class BasicListener implements Listener {
     			}
     			e.getPlayer().sendMessage("sign selected");
     			lastSignMap.put(e.getPlayer(), (Sign)s);
+    		}
+    		
+    		if ( e.getClickedBlock().getType() == Material.STONE_BUTTON ) {
+    			teleportToWorld(e.getPlayer(), "survival");
     		}
     	}
     }
